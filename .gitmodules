@@ -1,0 +1,9 @@
+[submodule "backend"]
+	path = backend
+	url = https://github.com/thisisnotruben/music_play-backend.git
+[submodule "frontend"]
+	path = frontend
+	url = https://github.com/thisisnotruben/music_play-frontend
+[submodule "util/audio_parser"]
+	path = util/audio_parser
+	url = https://github.com/thisisnotruben/music_play-frontend.git

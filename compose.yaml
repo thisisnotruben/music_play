@@ -1,0 +1,34 @@
+services:
+  db:
+    image: postgres:latest
+    container_name: database
+    environment:
+      POSTGRES_DB: music_play
+      POSTGRES_USER: &VAR_POSTGRES_USER admin
+      POSTGRES_PASSWORD: &VAR_POSTGRES_PASSWORD admin123
+      PGUSER: *VAR_POSTGRES_USER
+    networks:
+      - backend
+    ports:
+      - 5432:5432 # exposing these ports for dev only
+    healthcheck:
+      test: pg_isready -U admin -d music_play
+      start_period: 5s
+  backend:
+    build: backend
+    container_name: backend
+    environment:
+      POSTGRES_HOST: db
+      POSTGRES_USER: *VAR_POSTGRES_USER
+      POSTGRES_PASSWORD: *VAR_POSTGRES_PASSWORD
+    networks:
+      - backend
+      - frontend
+    depends_on:
+      db:
+        condition: service_healthy
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
