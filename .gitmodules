@@ -6,4 +6,4 @@
 	url = https://github.com/thisisnotruben/music_play-frontend
 [submodule "util/audio_parser"]
 	path = util/audio_parser
-	url = https://github.com/thisisnotruben/music_play-frontend.git
+	url = https://github.com/thisisnotruben/music_play-util-audio-parser.git
