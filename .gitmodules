@@ -10,3 +10,6 @@
 [submodule "storage"]
 	path = storage
 	url = https://github.com/thisisnotruben/music_play-storage
+[submodule "search"]
+	path = search
+	url = https://github.com/thisisnotruben/music_play-search
