@@ -1,34 +1,67 @@
 services:
-  db:
+  database:
     image: postgres:latest
     container_name: database
     environment:
       POSTGRES_DB: music_play
       POSTGRES_USER: &VAR_POSTGRES_USER admin
-      POSTGRES_PASSWORD: &VAR_POSTGRES_PASSWORD admin123
+      POSTGRES_PASSWORD: admin123
       PGUSER: *VAR_POSTGRES_USER
-    networks:
-      - backend
     ports:
-      - 5432:5432 # exposing these ports for dev only
+      - 5432:5432
     healthcheck:
       test: pg_isready -U admin -d music_play
       start_period: 5s
+  storage:
+    image: dxflrs/garage:v2.3.0
+    container_name: storage
+    command: /garage server --single-node --default-bucket --default-access-key 
+    environment:
+      GARAGE_DEFAULT_ACCESS_KEY: GK07f3744cb06e129ce707975e
+      GARAGE_DEFAULT_SECRET_KEY: 31cf4727b4601aa5e3c9116f5d76112dff2b8391e04e2dd6354b5c5fca10cd27
+      GARAGE_DEFAULT_BUCKET: music-play
+    ports:
+      - 3900:3900
+      - 3901:3901
+      - 3902:3902
+      - 3903:3903
+    volumes:
+        - ${PWD}/startup/garage.toml:/etc/garage.toml
+  search:
+    image: solr:latest
+    container_name: search
+    ports:
+      - 8983:8983
+    healthcheck:
+      test: solr status
+      start_period: 5s
+  startup:
+    build: startup/seedData
+    container_name: startup
+    env_file:
+      - path: startup/.env
+        required: true
+      - path: startup/.env.docker
+        required: true
+    restart: on-failure
+    depends_on:
+      database:
+        condition: service_healthy
+      search:
+        condition: service_healthy
+    healthcheck:
+      test: curl -f http://localhost:8080/isReady || exit 1
+      start_period: 10s
   backend:
     build: backend
     container_name: backend
-    environment:
-      POSTGRES_HOST: db
-      POSTGRES_USER: *VAR_POSTGRES_USER
-      POSTGRES_PASSWORD: *VAR_POSTGRES_PASSWORD
-    networks:
-      - backend
-      - frontend
+    env_file:
+      - path: startup/.env
+        required: true
+      - path: startup/.env.docker
+        required: true
+    ports:
+      - 8080:8080
     depends_on:
-      db:
+      startup:
         condition: service_healthy
-networks:
-  frontend:
-    driver: bridge
-  backend:
-    driver: bridge
