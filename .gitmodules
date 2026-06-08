@@ -7,9 +7,12 @@
 [submodule "util/audio_parser"]
 	path = util/audio_parser
 	url = https://github.com/thisisnotruben/music_play-util-audio-parser
-[submodule "storage"]
-	path = storage
-	url = https://github.com/thisisnotruben/music_play-storage
-[submodule "search"]
-	path = search
+[submodule "lib/SearchLib"]
+	path = lib/SearchLib
 	url = https://github.com/thisisnotruben/music_play-search
+[submodule "lib/MusicPlayPojoLib"]
+	path = lib/MusicPlayPojoLib
+	url = https://github.com/thisisnotruben/music_play-pojo
+[submodule "startup/seedData"]
+	path = startup/seedData
+	url = https://github.com/thisisnotruben/music_play-startup
