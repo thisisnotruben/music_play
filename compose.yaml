@@ -36,14 +36,14 @@ services:
       test: solr status
       start_period: 5s
   startup:
-    build: startup/seedData
+    image: rewrap0998/music_play-startup
+    # build: startup/seedData
     container_name: startup
     env_file:
       - path: startup/.env
         required: true
       - path: startup/.env.docker
         required: true
-    restart: on-failure
     depends_on:
       database:
         condition: service_healthy
@@ -51,9 +51,10 @@ services:
         condition: service_healthy
     healthcheck:
       test: curl -f http://localhost:8080/isReady || exit 1
-      start_period: 10s
+      start_period: 15s
   backend:
-    build: backend
+    image: rewrap0998/music_play-backend
+    # build: backend
     container_name: backend
     env_file:
       - path: startup/.env
@@ -64,4 +65,22 @@ services:
       - 8080:8080
     depends_on:
       startup:
+        condition: service_healthy
+    healthcheck:
+      test: curl -f --silent localhost:8080/actuator/health | grep UP || exit 1
+      start_period: 10s
+      interval: 10s
+  frontend:
+    image: rewrap0998/music_play-frontend
+    # build: frontend
+    container_name: frontend
+    env_file:
+      - path: startup/.env.frontend
+        required: true
+      - path: startup/.env.frontend.docker
+        required: true
+    ports:
+      - 8443:8080
+    depends_on:
+      backend:
         condition: service_healthy
