@@ -1,48 +1,58 @@
+/'
+https://plantuml.com/ie-diagram
+'/
 @startuml
-entity song {
-    id: integer <<PK>>
+entity album {
+    * id: integer <<PK>>
     --
-    name: varchar
-    artist_id: integer <<FK>>
-    genre: varchar
-    length: decimal
-    cover_path: varchar
-    audio_path: varchar
-}
-
-entity playlist {
-    id: integer <<PK>>
-    --
-    app_user_id: integer <<FK>>
-    name: varchar
-}
-
-entity playlist_song {
-    song_id: number <<PK, FK>>
-    playlist_id: number <<PK, FK>>
-}
-
-entity artist {
-    id: integer <<PK>>
-    --
-    first_name: varchar
-    last_name: varchar
+    * name: varchar
+    * coverPath: varchar
+    * artist_id integer <FK>
 }
 
 entity app_user {
-    id: integer <<PK>>
+    * id: integer <<PK>>
     --
-    username: varchar
-    password: varchar
-    email: varchar
-    first_name: varchar
-    last_name: varchar
+    * username: varchar
+    * password: varchar
+    * email: varchar
+    * first_name: varchar
+    * last_name: varchar
 }
 
-song}|--||playlist_song
-song}|--||artist
-playlist_song}|--||playlist
+entity artist {
+    * id: integer <<PK>>
+    --
+    * name: varchar
+}
 
-/'playlist_song}]--|playlist'/
+entity playlist {
+    * id: integer <<PK>>
+    --
+    * name: varchar
+    * cover_path: varchar
+    * app_user_id: integer <<FK>>
+}
+
+entity playlist_song {
+    * song_id: number <<PK, FK>>
+    * playlist_id: number <<PK, FK>>
+}
+
+entity song {
+    * id: integer <<PK>>
+    --
+    * name: varchar
+    * genre: varchar
+    * length: decimal
+    * audio_path: varchar
+    * album_id: integer <<FK>>
+}
+
+song}|..||album
+album}|..||artist
+
+playlist_song}o..||song
+playlist_song}o..||playlist
 playlist}o..||app_user
 @enduml

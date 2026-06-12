@@ -1,0 +1,32 @@
+/'
+https://cdn-0.plantuml.com/sequence-diagram
+'/
+@startuml
+actor       User        as user
+entity      Frontend    as frontend
+database    Storage     as storage
+boundary    Backend     as backend
+database    Database    as database
+collections Search      as search
+
+user -> frontend: Interaction
+frontend -> storage: Fetches image\n& audio data
+
+group Backend CRUD operations
+    database -> frontend: Retrieves audio metadata
+    backend -> storage: Uploads custom playlist\n image cover art
+    note over backend
+    Involve retrieving\editing
+    account info & music metadata.
+    end note
+end
+
+search -> frontend: Provides searching ability for database
+note over search
+Is interacted via backend.
+end note
+
+note across
+All Crud operations can be found via OpenAPI spec.
+end note
+@enduml

@@ -51,7 +51,7 @@ services:
         condition: service_healthy
     healthcheck:
       test: curl -f http://localhost:8080/isReady || exit 1
-      start_period: 2:15m
+      start_period: 2m
   backend:
     image: rewrap0998/music_play-backend
     # build: backend
