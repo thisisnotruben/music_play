@@ -32,9 +32,37 @@ services:
     healthcheck:
       test: solr status
       start_period: 5s
+  message:
+      image: rabbitmq:4.2.5-management-alpine
+      container_name: message
+      env_file:
+        - path: startup/.env.message
+          required: true
+      ports:
+        - 15672:15672
+        - 5672:5672
+      healthcheck:
+        test: rabbitmq-diagnostics -q ping
+        start_period: 5s
+  auth:
+    image: quay.io/keycloak/keycloak:26.7.1
+    container_name: auth
+    command: start-dev --health-enabled=true --verbose --import-realm --spi-events-listener--jboss-logging--success-level=info
+    env_file:
+      - path: startup/.env.auth
+        required: true
+    ports:
+      - 8081:8080
+      - 9000:9000
+    volumes:
+      - ${PWD}/startup/realm-export.json:/opt/keycloak/data/import/realm-export.json
+      - ${PWD}/startup/KeycloakSpi-1.0-SNAPSHOT.jar:/opt/keycloak/providers/KeycloakSpi-1.0-SNAPSHOT.jar
+    depends_on:
+      message:
+        condition: service_healthy
   startup:
-    image: rewrap0998/music_play-startup
-    # build: startup/seedData
+    # image: rewrap0998/music_play-startup
+    build: startup/seedData
     container_name: startup
     env_file:
       - path: startup/.env
@@ -50,8 +78,8 @@ services:
       test: curl -f http://localhost:8080/isReady || exit 1
       start_period: 2m
   backend:
-    image: rewrap0998/music_play-backend
-    # build: backend
+    # image: rewrap0998/music_play-backend
+    build: backend
     container_name: backend
     env_file:
       - path: startup/.env
@@ -68,8 +96,8 @@ services:
       start_period: 5s
       interval: 10s
   frontend:
-    image: rewrap0998/music_play-frontend
-    # build: frontend
+    # image: rewrap0998/music_play-frontend
+    build: frontend
     container_name: frontend
     env_file:
       - path: startup/.env.frontend

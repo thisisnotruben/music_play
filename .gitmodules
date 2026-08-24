@@ -16,3 +16,6 @@
 [submodule "startup/seedData"]
 	path = startup/seedData
 	url = https://github.com/thisisnotruben/music_play-startup
+[submodule "lib/KeycloakSpi"]
+	path = lib/KeycloakSpi
+	url = https://github.com/thisisnotruben/music_play-keycloak-spi.git
