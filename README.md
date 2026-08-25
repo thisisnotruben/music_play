@@ -34,7 +34,6 @@ docker exec -it database psql -h localhost -p 5432 -d music_play -U admin
 Entities in diagram below to query.
 
 ## TODO
-- Security
 - Explore feed
 - Scroll size of main content
 - response validation when sending data to backend
