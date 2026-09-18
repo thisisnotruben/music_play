@@ -105,7 +105,7 @@ services:
       - path: startup/.env.frontend.docker
         required: true
     ports:
-      - 8443:8080
+      - 8443:80
     depends_on:
       backend:
         condition: service_healthy

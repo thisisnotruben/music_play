@@ -36,8 +36,6 @@ Entities in diagram below to query.
 ## TODO
 - Explore feed
 - Scroll size of main content
-- response validation when sending data to backend
-- favicon
 
 ## Diagrams
 ### Entity diagram
