@@ -13,10 +13,6 @@ docker compose up -d; \
 xdg-open http://localhost:8443;
 ```
 
-Login to `http://localhost:8443` with:
-- username: `admin`
-- password: `admin123`
-
 ### API Docs
 Backend application needs to be running to view links
 - [Swagger UI](http://localhost:8080/swagger-ui/index.html)

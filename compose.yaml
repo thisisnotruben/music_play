@@ -10,6 +10,8 @@ services:
     healthcheck:
       test: pg_isready -U admin -d music_play
       start_period: 5s
+    volumes:
+      - database-data:/var/lib/postgresql
   storage:
     image: dxflrs/garage:v2.3.0
     container_name: storage
@@ -24,6 +26,7 @@ services:
       - 3903:3903
     volumes:
         - ${PWD}/startup/garage.toml:/etc/garage.toml
+        - storage-data:/var/lib/garage
   search:
     image: solr:latest
     container_name: search
@@ -32,6 +35,8 @@ services:
     healthcheck:
       test: solr status
       start_period: 5s
+    volumes:
+      - search-data:/var/solr
   message:
       image: rabbitmq:4.2.5-management-alpine
       container_name: message
@@ -44,6 +49,8 @@ services:
       healthcheck:
         test: rabbitmq-diagnostics -q ping
         start_period: 5s
+      volumes:
+        - message-data:/var/lib/rabbitmq
   auth:
     image: quay.io/keycloak/keycloak:26.7.1
     container_name: auth
@@ -109,3 +116,8 @@ services:
     depends_on:
       backend:
         condition: service_healthy
+volumes:
+  database-data:
+  storage-data:
+  search-data:
+  message-data:

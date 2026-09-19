@@ -2649,7 +2649,7 @@
       "alias": "UPDATE_PASSWORD",
       "name": "Update Password",
       "providerId": "UPDATE_PASSWORD",
-      "enabled": true,
+      "enabled": false,
       "defaultAction": false,
       "priority": 57,
       "config": {}
